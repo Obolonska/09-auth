@@ -2,12 +2,11 @@ import axios from "axios";
 
 import type { Note, NewNote } from "../types/note";
 
-const myKey = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = process.env.NEXT_PUBLIC_API_URL + `/api`;
 // axios.defaults.baseURL = "https://notehub-api.goit.study";
-axios.defaults.headers.common["Authorization"] = `Bearer ${myKey}`;
 
 export const nextServer = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: baseURL,
   withCredentials: true, // дозволяє axios працювати з cookie
 });
 
@@ -22,9 +21,6 @@ export const getNotes = async (
   tag?: string
 ): Promise<NotesResponse> => {
   const response = await axios.get<NotesResponse>(`/notes`, {
-    headers: {
-      Authorization: `Bearer ${myKey}`,
-    },
     params: {
       ...(search !== "" ? { search } : {}),
       tag,
