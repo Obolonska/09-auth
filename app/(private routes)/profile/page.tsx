@@ -1,4 +1,4 @@
-// import Image from "next/image";
+import Image from "next/image";
 import css from "./page.module.css";
 import Link from "next/link";
 import { getServerMe } from "@/app/api/serverApi";
@@ -16,13 +16,13 @@ export default async function ProfilePage() {
             </Link>
           </div>
           <div className={css.avatarWrapper}>
-            {/* <Image
-              src="Avatar"
+            <Image
+              src="https://png.klev.club/uploads/posts/2024-04/png-klev-club-vbaf-p-avatarka-png-11.png"
               alt="User Avatar"
               width={120}
               height={120}
               className={css.avatar}
-            /> */}
+            />
           </div>
           <div className={css.profileInfo}>
             <p>Username: {user.userName}</p>

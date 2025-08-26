@@ -1,17 +1,16 @@
 "use client";
 import css from "./page.module.css";
-import AvatarPicker from "@/components/AvatarPicker/AvatarPicker";
 import { useEffect, useState } from "react";
 import { getMe, updateMe } from "@/app/api/clientApi";
+import { useRouter } from "next/navigation";
 
 export default function EditProfile() {
   const [userName, setUserName] = useState("");
-  const [photoUrl, setPhotoUrl] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     getMe().then((user) => {
       setUserName(user.userName ?? "");
-      setPhotoUrl(user.photoUrl ?? "");
     });
   }, []);
 
@@ -27,8 +26,6 @@ export default function EditProfile() {
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
-
-        <AvatarPicker profilePhotoUrl={photoUrl} />
 
         <form onSubmit={handleSaveUser} className={css.profileInfo}>
           <div className={css.usernameWrapper}>
@@ -47,7 +44,11 @@ export default function EditProfile() {
             <button type="submit" className={css.saveButton}>
               Save
             </button>
-            <button type="button" className={css.cancelButton}>
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className={css.cancelButton}
+            >
               Cancel
             </button>
           </div>
