@@ -2,9 +2,14 @@ import axios from "axios";
 
 import type { Note, NewNote } from "../types/note";
 
-const myKey = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
-axios.defaults.baseURL = "https://notehub-public.goit.study/api";
+const myKey = process.env.NEXT_PUBLIC_API_URL;
+// axios.defaults.baseURL = "https://notehub-api.goit.study";
 axios.defaults.headers.common["Authorization"] = `Bearer ${myKey}`;
+
+export const nextServer = axios.create({
+  baseURL: "http://localhost:3001/api",
+  withCredentials: true, // дозволяє axios працювати з cookie
+});
 
 export interface NotesResponse {
   notes: Note[];
@@ -29,16 +34,16 @@ export const getNotes = async (
   return response.data;
 };
 export const getSingleNote = async (id: string) => {
-  const res = await axios.get<Note>(`/notes/${id}`);
+  const res = await nextServer.get<Note>(`/notes/${id}`);
   return res.data;
 };
 
 export const deleteNote = async (noteId: string): Promise<Note> => {
-  const res = await axios.delete<Note>(`/notes/${noteId}`);
+  const res = await nextServer.delete<Note>(`/notes/${noteId}`);
   return res.data;
 };
 
 export const addNote = async (noteData: NewNote): Promise<Note> => {
-  const res = await axios.post<Note>(`/notes/`, noteData);
+  const res = await nextServer.post<Note>(`/notes`, noteData);
   return res.data;
 };

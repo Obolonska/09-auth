@@ -9,7 +9,7 @@ export const initialDraft: NewNote = {
 };
 
 type NoteDraftState = {
-  draft: NewNote | null;
+  draft: NewNote;
   setDraft: (newData: NewNote) => void;
   clearDraft: () => void;
 };
@@ -17,9 +17,9 @@ export const useNoteDraft = create<NoteDraftState>()(
   persist(
     (set) => {
       return {
-        draft: null,
+        draft: initialDraft,
         setDraft: (newData: NewNote) => set(() => ({ draft: newData })),
-        clearDraft: () => set(() => ({ draft: null })),
+        clearDraft: () => set(() => ({ draft: initialDraft })),
       };
     },
     {
