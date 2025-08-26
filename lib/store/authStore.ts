@@ -1,4 +1,6 @@
 // lib/store/authStore.ts
+"use client";
+
 import { User } from "@/types/user";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -27,7 +29,7 @@ export const useAuthStore = create<AuthState>()(
         })),
     }),
     {
-      name: "auth-store",
+      name: "auth-store", // ключ у localStorage
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,

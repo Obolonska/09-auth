@@ -5,6 +5,7 @@ import { useState } from "react";
 import { register } from "../../api/serverApi";
 import { RegisterRequest } from "@/types/user";
 import { AxiosError } from "axios";
+import { useAuthStore } from "@/lib/store/authStore";
 
 type ApiErrorResponse = {
   error: string;
@@ -13,6 +14,8 @@ type ApiErrorResponse = {
 export default function SignUpPage() {
   const router = useRouter();
   const [error, setError] = useState("");
+  // Отримуємо метод із стора
+  const setUser = useAuthStore((state) => state.setUser);
   const handleSubmit = async (formData: FormData) => {
     try {
       // Типізуємо дані форми
@@ -22,6 +25,8 @@ export default function SignUpPage() {
 
       // Виконуємо редірект або відображаємо помилку
       if (res) {
+        // Записуємо користувача у глобальний стан
+        setUser(res);
         router.push("/profile");
       } else {
         setError("Invalid email or password");
