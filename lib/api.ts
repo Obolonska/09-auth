@@ -20,7 +20,7 @@ export const getNotes = async (
   page: number,
   tag?: string
 ): Promise<NotesResponse> => {
-  const response = await axios.get<NotesResponse>(`/notes`, {
+  const response = await nextServer.get<NotesResponse>(`/notes`, {
     params: {
       ...(search !== "" ? { search } : {}),
       tag,
