@@ -1,8 +1,8 @@
-import { RegisterRequest, User } from "@/types/user";
-import { nextServer } from "./clientApi";
+import { User } from "@/types/user";
 import { cookies } from "next/headers";
+import { nextServer } from "./api";
 
-export const checkServerSession = async () => {
+export const checkSessionServer = async () => {
   // Дістаємо поточні cookie
   const cookieStore = await cookies();
   const res = await nextServer.get("/auth/session", {
@@ -15,10 +15,6 @@ export const checkServerSession = async () => {
   return res;
 };
 
-export const register = async (data: RegisterRequest) => {
-  const res = await nextServer.post<User>(`/auth/register`, data);
-  return res.data;
-};
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
   const { data } = await nextServer.get("/users/me", {

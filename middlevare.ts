@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { parse } from "cookie";
-import { checkServerSession } from "./app/api/serverApi";
+import { checkSessionServer } from "@/lib/api/serverApi";
 
 const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     if (refreshToken) {
       // Якщо accessToken відсутній, але є refreshToken — потрібно перевірити сесію навіть для публічного маршруту,
       // адже сесія може залишатися активною, і тоді потрібно заборонити доступ до публічного маршруту.
-      const data = await checkServerSession();
+      const data = await checkSessionServer();
       const setCookie = data.headers["set-cookie"];
 
       if (setCookie) {
@@ -69,7 +69,7 @@ export async function middleware(request: NextRequest) {
 
     // приватний маршрут — редірект на сторінку входу
     if (isPrivateRoute) {
-      return NextResponse.redirect(new URL(`/sign-in`, request.url));
+      return NextResponse.redirect(new URL("/sign-in", request.url));
     }
   }
 

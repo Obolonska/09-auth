@@ -1,5 +1,5 @@
 "use client";
-import { login } from "../../api/clientApi";
+import { login } from "../../../lib/api/clientApi";
 import css from "./page.module.css";
 import { useRouter } from "next/navigation";
 import { RegisterRequest } from "@/types/user";

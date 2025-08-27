@@ -1,13 +1,6 @@
 import { RegisterRequest, User } from "@/types/user";
-import axios from "axios";
 import type { Note, NewNote } from "@/types/note";
-
-const baseURL = process.env.NEXT_PUBLIC_API_URL + `/api`;
-
-export const nextServer = axios.create({
-  baseURL: baseURL,
-  withCredentials: true, // дозволяє axios працювати з cookie
-});
+import { nextServer } from "./api";
 
 export interface NotesResponse {
   notes: Note[];
@@ -65,11 +58,17 @@ export const login = async (data: RegisterRequest) => {
 };
 
 export type UpdateUserRequest = {
-  userName?: string;
-  photoUrl?: string;
+  username?: string;
+  email?: string;
 };
 
-export const updateMe = async (payload: UpdateUserRequest) => {
-  const res = await nextServer.patch<User>("/users/me", payload);
+export const updateMe = async (data: UpdateUserRequest) => {
+  console.log("Sending updateMe payload:", data);
+  const res = await nextServer.patch<User>("/users/me", data);
+  return res.data;
+};
+
+export const register = async (data: RegisterRequest) => {
+  const res = await nextServer.post<User>(`/auth/register`, data);
   return res.data;
 };

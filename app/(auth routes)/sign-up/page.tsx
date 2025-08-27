@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import css from "./page.module.css";
 import { useState } from "react";
-import { register } from "../../api/serverApi";
+import { register } from "../../../lib/api/serverApi";
 import { RegisterRequest } from "@/types/user";
 import { AxiosError } from "axios";
 import { useAuthStore } from "@/lib/store/authStore";

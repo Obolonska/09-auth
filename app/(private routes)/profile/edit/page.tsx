@@ -1,27 +1,54 @@
 "use client";
 import css from "./page.module.css";
 import { useEffect, useState } from "react";
-import { getMe, updateMe } from "@/app/api/clientApi";
+import { getMe, updateMe } from "@/lib/api/clientApi";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/store/authStore";
 
 export default function EditProfile() {
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
+  // Отримуємо поточного користувача зі стану, щоб використовувати його дані
+  const currentUser = useAuthStore((state) => state.user);
 
+  // useEffect для заповнення полів форми даними користувача
   useEffect(() => {
-    getMe().then((user) => {
-      setUserName(user.userName ?? "");
-    });
-  }, []);
+    // Якщо дані користувача вже в стані, використовуємо їх, щоб уникнути зайвого запиту
+    if (currentUser) {
+      setUsername(currentUser.username ?? "");
+      setEmail(currentUser.email ?? "");
+    } else {
+      // Якщо дані не завантажені (наприклад, при першому рендері), робимо API-запит
+      getMe().then((user) => {
+        setUsername(user.username ?? "");
+        setEmail(user.email ?? "");
+      });
+    }
+  }, [currentUser]); // Додаємо currentUser як залежність, щоб оновити форму, якщо він зміниться
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName(event.target.value);
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
   };
 
   const handleSaveUser = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await updateMe({ userName, photoUrl: "" });
+    try {
+      // Використовуємо async/await для більш чистого коду
+      const updatedUser = await updateMe({ username: username });
+
+      // Оновлюємо стан глобального сховища за допомогою setUser
+      setUser(updatedUser);
+
+      // Перенаправляємо користувача на сторінку профілю
+      router.push("/profile");
+    } catch (error) {
+      console.error("Failed to update user", error);
+      // Можна додати обробку помилки для користувача (наприклад, тост-повідомлення)
+    }
   };
+
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
@@ -34,11 +61,12 @@ export default function EditProfile() {
               id="username"
               type="text"
               className={css.input}
-              onChange={handleChange}
+              onChange={handleUsernameChange}
+              value={username} // Додаємо value для контрольованого компонента
             />
           </div>
 
-          <p>Email: user_email@example.com</p>
+          <p>Email: {email}</p>
 
           <div className={css.actions}>
             <button type="submit" className={css.saveButton}>
