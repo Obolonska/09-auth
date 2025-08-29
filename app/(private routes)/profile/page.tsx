@@ -3,6 +3,27 @@ import css from "./page.module.css";
 import Link from "next/link";
 import { getServerMe } from "@/lib/api/serverApi";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Profile page",
+  description: "Profile information",
+  openGraph: {
+    title: "Profile page",
+    description: "Profile information",
+    url: `https://notehub.com/profile`,
+    images: [
+      {
+        url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Note Hub",
+      },
+    ],
+    type: "article",
+  },
+};
+
 export default async function ProfilePage() {
   const user = await getServerMe();
   return (
@@ -17,7 +38,7 @@ export default async function ProfilePage() {
           </div>
           <div className={css.avatarWrapper}>
             <Image
-              src="https://png.klev.club/uploads/posts/2024-04/png-klev-club-vbaf-p-avatarka-png-11.png"
+              src={user.avatar}
               alt="User Avatar"
               width={120}
               height={120}

@@ -3,6 +3,7 @@ import css from "./page.module.css";
 import { updateMe } from "@/lib/api/clientApi";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store/authStore";
+import Image from "next/image";
 
 export default function EditProfile() {
   const user = useAuthStore((state) => state.user);
@@ -22,6 +23,13 @@ export default function EditProfile() {
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
+        <Image
+          src={user?.avatar || ""}
+          alt="User Avatar"
+          width={120}
+          height={120}
+          className={css.avatar}
+        />
 
         <form action={handleSubmit} className={css.profileInfo}>
           <div className={css.usernameWrapper}>

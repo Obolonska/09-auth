@@ -28,19 +28,24 @@ export default function AuthNavigation() {
   // інакше - посилання на логін та реєстрацію
   return (
     <>
-      <li className={css.navigationItem}>
-        <Link href="/profile" prefetch={false} className={css.navigationLink}>
-          Profile
-        </Link>
-      </li>
-
       {isAuthenticated ? (
-        <li className={css.navigationItem}>
-          <p className={css.userEmail}>{user?.email}</p>
-          <button onClick={handleLogout} className={css.logoutButton}>
-            Logout
-          </button>
-        </li>
+        <>
+          <li className={css.navigationItem}>
+            <Link
+              href="/profile"
+              prefetch={false}
+              className={css.navigationLink}
+            >
+              Profile
+            </Link>
+          </li>
+          <li className={css.navigationItem}>
+            <p className={css.userEmail}>{user?.email}</p>
+            <button onClick={handleLogout} className={css.logoutButton}>
+              Logout
+            </button>
+          </li>
+        </>
       ) : (
         <>
           <li className={css.navigationItem}>
@@ -52,7 +57,6 @@ export default function AuthNavigation() {
               Login
             </Link>
           </li>
-
           <li className={css.navigationItem}>
             <Link
               href="/sign-up"

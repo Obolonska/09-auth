@@ -2,19 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "png.klev.club",
-        port: "",
-        pathname: "/**", // або "/**" якщо всі шляхи
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.another-site.com",
-      },
-    ],
+    remotePatterns: [{ protocol: "https", hostname: "ac.goit.global" }],
   },
+
   async headers() {
     return [
       {
