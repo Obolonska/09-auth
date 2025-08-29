@@ -1,24 +1,22 @@
-import { RegisterRequest, User } from "@/types/user";
-import type { Note, NewNote } from "@/types/note";
+import { User, UserRequest } from "@/types/user";
+import type { Note, NewNote, NotesResponse } from "@/types/note";
 import { nextServer } from "./api";
-
-export interface NotesResponse {
-  notes: Note[];
-  totalPages: number;
-}
 
 export const getNotes = async (
   search: string,
   page: number,
-  tag?: string
+  tag?: string,
+  perPage: number = 12
 ): Promise<NotesResponse> => {
   const response = await nextServer.get<NotesResponse>(`/notes`, {
     params: {
       ...(search !== "" ? { search } : {}),
       tag,
       page,
+      perPage,
     },
   });
+
   return response.data;
 };
 export const getSingleNote = async (id: string) => {
@@ -49,26 +47,21 @@ export const getMe = async () => {
   return res.data;
 };
 export const logout = async (): Promise<void> => {
-  await nextServer.post(`/auth/logout`);
+  const res = await nextServer.post(`/auth/logout`);
+  return res.data.success;
 };
 
-export const login = async (data: RegisterRequest) => {
-  const res = await nextServer.post<User>(`/auth/login`, data);
+export const updateMe = async (user: Partial<User>) => {
+  const res = await nextServer.patch<User>("/users/me", user);
   return res.data;
 };
 
-export type UpdateUserRequest = {
-  username?: string;
-  email?: string;
-};
-
-export const updateMe = async (data: UpdateUserRequest) => {
-  console.log("Sending updateMe payload:", data);
-  const res = await nextServer.patch<User>("/users/me", data);
+export const register = async (user: UserRequest) => {
+  const res = await nextServer.post<User>(`/auth/register`, user);
   return res.data;
 };
 
-export const register = async (data: RegisterRequest) => {
-  const res = await nextServer.post<User>(`/auth/register`, data);
+export const login = async (user: UserRequest) => {
+  const res = await nextServer.post<User>(`/auth/login`, user);
   return res.data;
 };

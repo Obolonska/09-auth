@@ -1,15 +1,10 @@
 "use client";
-import { login } from "../../../lib/api/clientApi";
+import { login } from "@/lib/api/clientApi";
 import css from "./page.module.css";
 import { useRouter } from "next/navigation";
-import { RegisterRequest } from "@/types/user";
+import { UserRequest } from "@/types/user";
 import { useState } from "react";
-import { AxiosError } from "axios";
 import { useAuthStore } from "@/lib/store/authStore";
-
-type ApiErrorResponse = {
-  error: string;
-};
 
 export default function SignInPage() {
   const [error, setError] = useState("");
@@ -19,7 +14,7 @@ export default function SignInPage() {
   const handleSubmit = async (formData: FormData) => {
     try {
       // Типізуємо дані форми
-      const formValues = Object.fromEntries(formData) as RegisterRequest;
+      const formValues = Object.fromEntries(formData) as UserRequest;
       // Виконуємо запит
       const res = await login(formValues);
       // Виконуємо редірект або відображаємо помилку
@@ -29,12 +24,11 @@ export default function SignInPage() {
       } else {
         setError("Invalid email or password");
       }
-    } catch (err) {
-      const axiosError = err as AxiosError<ApiErrorResponse>;
+    } catch (error) {
       setError(
-        axiosError.response?.data?.error ??
-          axiosError.message ??
-          "Oops... some error"
+        typeof error === "object" && error !== null && "message" in error
+          ? (error as { message?: string }).message ?? "Oops... some error"
+          : "Oops... some error"
       );
     }
   };

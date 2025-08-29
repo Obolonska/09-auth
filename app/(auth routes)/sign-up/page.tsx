@@ -2,8 +2,8 @@
 import { useRouter } from "next/navigation";
 import css from "./page.module.css";
 import { useState } from "react";
-import { register } from "../../../lib/api/serverApi";
-import { RegisterRequest } from "@/types/user";
+import { register } from "@/lib/api/clientApi";
+import { UserRequest } from "@/types/user";
 import { AxiosError } from "axios";
 import { useAuthStore } from "@/lib/store/authStore";
 
@@ -19,9 +19,9 @@ export default function SignUpPage() {
   const handleSubmit = async (formData: FormData) => {
     try {
       // Типізуємо дані форми
-      const formValues = Object.fromEntries(formData) as RegisterRequest;
+      const user = Object.fromEntries(formData) as UserRequest;
       // Виконуємо запит
-      const res = await register(formValues);
+      const res = await register(user);
 
       // Виконуємо редірект або відображаємо помилку
       if (res) {
@@ -31,8 +31,8 @@ export default function SignUpPage() {
       } else {
         setError("Invalid email or password");
       }
-    } catch (err) {
-      const axiosError = err as AxiosError<ApiErrorResponse>;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
       setError(
         axiosError.response?.data?.error ??
           axiosError.message ??

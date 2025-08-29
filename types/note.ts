@@ -22,3 +22,8 @@ export type NewNote = {
   content: string;
   tag: NoteTag;
 };
+
+export type NotesResponse = {
+  notes: Note[];
+  totalPages: number;
+};

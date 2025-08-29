@@ -1,4 +1,3 @@
-// lib/store/authStore.ts
 "use client";
 
 import { User } from "@/types/user";
