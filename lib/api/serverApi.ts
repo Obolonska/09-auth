@@ -10,31 +10,8 @@ export async function checkSessionServer() {
       Cookie: cookieStore.toString(),
     },
   });
-  return data.success;
+  return data;
 }
-// export async function checkSessionServer() {
-//   const cookieStore = await cookies();
-
-//   // збираємо кукі в один рядок
-//   const cookieString = cookieStore
-//     .getAll()
-//     .map((c) => `${c.name}=${c.value}`)
-//     .join("; ");
-
-//   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/session`, {
-//     method: "GET",
-//     headers: {
-//       Cookie: cookieString,
-//     },
-//     cache: "no-store", // обов'язково, щоб не кешувалося
-//   });
-
-//   if (!res.ok) {
-//     return null; // або throw new Error("Session check failed");
-//   }
-
-//   return await res.json(); // тепер у тебе є data.success
-// }
 
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();

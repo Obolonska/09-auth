@@ -2,7 +2,7 @@
 import { NewNote, NoteTag } from "@/types/note";
 import css from "./NoteForm.module.css";
 import { addNote } from "@/lib/api/clientApi";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { initialDraft, useNoteDraft } from "@/lib/store/noteStore";
 import { ChangeEvent } from "react";
@@ -14,10 +14,13 @@ type CreateFormProps = {
 const NoteForm = ({ allTags }: CreateFormProps) => {
   const { draft, setDraft, clearDraft } = useNoteDraft();
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { mutate, isPending } = useMutation({
     mutationFn: addNote,
     onSuccess: () => {
       clearDraft();
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
       router.push("/notes/filter/all");
     },
   });

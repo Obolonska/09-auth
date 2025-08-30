@@ -1,4 +1,4 @@
-import { getSingleNote } from "@/lib/api/clientApi";
+import { getSingleNote } from "@/lib/api/serverApi";
 import {
   dehydrate,
   HydrationBoundary,
